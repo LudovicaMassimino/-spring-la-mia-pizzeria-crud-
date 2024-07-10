@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import it.ludo.pizzeria.repository.PizzaRepo;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("pizzeria")
 public class controllerPizza {
 
     @Autowired
@@ -21,5 +21,12 @@ public class controllerPizza {
     public String pizze(Model model) {
         model.addAttribute("pizze", pizzaRepo.findAll());
         return "pizzeria/index";
+    }
+
+    @GetMapping("/dettaglio/{id}")
+    public String dettaglioPizze(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute("dettaglio", pizzaRepo.getReferenceById(id));
+        return "pizzeria/dettaglio";
     }
 }

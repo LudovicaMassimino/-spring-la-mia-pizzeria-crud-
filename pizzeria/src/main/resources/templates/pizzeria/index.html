@@ -14,12 +14,12 @@
     <div class="container">
         <h1>Menu</h1>
         <div th:unless="${pizze.isEmpty()}" th:each="item : ${pizze}" class="card" style="width: 18rem;">
-            <img class="card-img-top" th:src="${item.foto}" alt="...">
+            <img class="card-img-top" th:src="@{${item.foto}}" alt="immagine pizza margherita">
             <div class="card-body">
                 <h5 class="card-title" th:text="${item.nome}"></h5>
                 <p class="card-text" th:text="${item.descrizione}"></p>
-                <p class="card-text" th:text="${item.price}"></p>
-                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                <p class="card-text" th:text="|€ ${#numbers.formatDecimal(item.price, 1, 2, 'COMMA')}|"></p>
+                <a th:href="@{|/pizzeria/dettaglio/${item.id}|}" class="btn btn-primary">Dettaglio</a>
             </div>
         </div>
         <div th:if="${pizze.isEmpty()}">
