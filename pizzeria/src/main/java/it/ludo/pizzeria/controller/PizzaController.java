@@ -46,15 +46,41 @@ public class PizzaController {
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("pizza") PizzaMod pizza, BindingResult bindingResult, Model model) {
 
-        if(pizza.getPrice() <= 0) {
+        if (pizza.getPrice() <= 0) {
             bindingResult.addError(new ObjectError("Errore di prezzo", "Inserisci il prezzo della pizza"));
         }
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "/pizzeria/create";
         }
 
         pizzaRepo.save(pizza);
 
+        return "redirect:/pizzeria/menu";
+    }
+
+    @GetMapping("edit/{id}")
+    public String editPizza(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute("edit", pizzaRepo.getReferenceById(id));
+        if (pizzaRepo == null) {
+            return "/redirect:/pizzeria/menu";
+        }
+
+        return "/pizzeria/edit";
+    }
+
+    @PostMapping("/edit")
+    public String editPizza(@Valid @ModelAttribute("pizza") PizzaMod pizza, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "edit";
+        }
+        pizzaRepo.save(pizza);
+        return "redirect:/pizzeria/menu";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deletePizza(@PathVariable("id") Integer id) {
+        pizzaRepo.deleteById(id);
         return "redirect:/pizzeria/menu";
     }
 }
