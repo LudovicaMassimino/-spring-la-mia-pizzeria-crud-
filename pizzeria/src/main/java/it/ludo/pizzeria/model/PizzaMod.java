@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pizza")
@@ -16,15 +18,18 @@ public class PizzaMod {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nome", nullable = false)
+    @NotBlank(message = "Inserisci il nome della pizza")
+    @Column(name = "nome", nullable = false, unique = true)
     private String nome;
 
+    @NotBlank(message = "Inserisci la descrizione della pizza")
     @Column(name = "descrizione", nullable = false)
     private String descrizione;
 
     @Column(name = "foto", nullable = true)
     private String foto;
 
+    @NotNull(message = "Inserisci il prezzo della pizza")
     @Column(name = "price", nullable = false)
     private double price;
 
