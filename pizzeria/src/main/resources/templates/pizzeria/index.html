@@ -13,7 +13,7 @@
 <body>
     <div class="container text-center">
         <h1>Menu</h1>
-        <div th:unless="${pizze.isEmpty()}" th:each="item : ${pizze}" class="card" style="width: 18rem;">
+        <div th:unless="${pizze.isEmpty()}" th:each="item : ${pizze}" class="card" style="width: 18rem; display: inline-block;">
             <img class="card-img-top" th:src="@{${item.foto}}" alt="immagine pizza margherita">
             <div class="card-body">
                 <h5 class="card-title" th:text="${item.nome}"></h5>
