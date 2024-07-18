@@ -1,5 +1,8 @@
 package it.ludo.pizzeria.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +27,27 @@ public class PizzaController {
     private PizzaRepo pizzaRepo;
 
     @GetMapping("/menu")
-    public String pizze(Model model) {
-        model.addAttribute("pizze", pizzaRepo.findAll());
+    public String pizze(String nome, Model model) {
+        List<PizzaMod> menu = new ArrayList<>();
+
+        if (nome == null || nome.isBlank()) {
+            menu = pizzaRepo.findAll();
+        } else {
+            menu = pizzaRepo.findByNome(nome);
+        }
+
+        model.addAttribute("pizze", menu);
         return "pizzeria/index";
     }
 
     @GetMapping("/dettaglio/{id}")
     public String dettaglioPizze(@PathVariable("id") Integer id, Model model) {
+        PizzaMod pizza = pizzaRepo.findById(id).orElse(null);
+        if (pizza == null) {
+            return "redirect:/pizzeria/menu";
+        }
 
-        model.addAttribute("dettaglio", pizzaRepo.getReferenceById(id));
+        model.addAttribute("dettaglio", pizza);
         return "pizzeria/dettaglio";
     }
 
@@ -45,34 +60,33 @@ public class PizzaController {
 
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("pizza") PizzaMod pizza, BindingResult bindingResult, Model model) {
-
         if (pizza.getPrice() <= 0) {
-            bindingResult.addError(new ObjectError("Errore di prezzo", "Inserisci il prezzo della pizza"));
+            bindingResult.rejectValue("price", "error.pizza", "Inserisci il prezzo della pizza");
         }
         if (bindingResult.hasErrors()) {
             return "/pizzeria/create";
         }
 
         pizzaRepo.save(pizza);
-
         return "redirect:/pizzeria/menu";
     }
 
     @GetMapping("edit/{id}")
     public String editPizza(@PathVariable("id") Integer id, Model model) {
-
-        model.addAttribute("edit", pizzaRepo.getReferenceById(id));
-        if (pizzaRepo == null) {
-            return "/redirect:/pizzeria/menu";
+        PizzaMod pizza = pizzaRepo.findById(id).orElse(null);
+        if (pizza == null) {
+            return "redirect:/pizzeria/menu";
         }
 
+        model.addAttribute("pizza", pizza);
         return "/pizzeria/edit";
     }
 
     @PostMapping("/edit")
-    public String editPizza(@Valid @ModelAttribute("pizza") PizzaMod pizza, BindingResult bindingResult, Model model) {
+    public String updatePizza(@Valid @ModelAttribute("pizza") PizzaMod pizza, BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
-            return "edit";
+            return "/pizzeria/edit";
         }
         pizzaRepo.save(pizza);
         return "redirect:/pizzeria/menu";

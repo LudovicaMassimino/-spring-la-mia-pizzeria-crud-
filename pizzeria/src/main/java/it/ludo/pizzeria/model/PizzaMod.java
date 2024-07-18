@@ -10,12 +10,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "pizza")
+@Table(name = "menu")
 public class PizzaMod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @NotBlank(message = "Inserisci il nome della pizza")
@@ -32,6 +31,8 @@ public class PizzaMod {
     @NotNull(message = "Inserisci il prezzo della pizza")
     @Column(name = "price", nullable = false)
     private double price;
+
+    // Getters and Setters
 
     public Integer getId() {
         return id;
