@@ -20,20 +20,23 @@ import it.ludo.pizzeria.repository.PizzaRepo;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("pizzeria")
+@RequestMapping("/pizzeria")
 public class PizzaController {
 
     @Autowired
     private PizzaRepo pizzaRepo;
 
     @GetMapping("/menu")
-    public String pizze(String nome, Model model) {
+    public String pizze(Model model, @RequestParam(name = "nome", required = false) String nome) {
         List<PizzaMod> menu = new ArrayList<>();
+        System.out.println(menu);
 
         if (nome == null || nome.isBlank()) {
             menu = pizzaRepo.findAll();
+            System.out.println("Tutte le pizze: " + menu);
         } else {
             menu = pizzaRepo.findByNome(nome);
+            System.out.println("Pizze filtrate per nome '" + nome + "': " + menu);
         }
 
         model.addAttribute("pizze", menu);

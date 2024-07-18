@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "pizza")
 public class PizzaMod {
 
     @Id

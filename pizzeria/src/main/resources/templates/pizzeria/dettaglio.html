@@ -13,9 +13,8 @@
     <div class="container">
         <h1 th:text="${dettaglio.nome}">Nome</h1>
         <p th:text="${dettaglio.descrizione}">Descrizione</p>
-        <p th:text="${dettaglio.prezzo}">Prezzo</p>
-        <a href="/" class="btn btn-secondary">Torna all'elenco</a>
-        <a th:href="@{/pizzeria/menu/{id}(id=${pizzeria.id})}" class="btn btn-primary">Modifica</a>
+        <p th:text="${dettaglio.price}">Prezzo</p>
+        <a href="/pizzeria/menu" class="btn btn-secondary">Torna all'elenco</a>
     </div>
 
     <script src="https://cdn.jsd
